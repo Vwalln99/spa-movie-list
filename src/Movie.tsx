@@ -1,42 +1,45 @@
-import {Form} from "react-router-dom";
+import { Form, useLoaderData } from "react-router-dom";
+import { getMovie } from "./handleMovies";
+
+export async function loader ({params}:{params:{id:string}}){
+    const movie = await getMovie(params.id);
+    return {movie};
+}
+
+type MovieType ={
+    id:string;
+    title:string;
+    runtime:number;
+    img:string;
+    social: string;
+};
 
 export default function Movie() {
-    const movie ={
-        title: "Dune: part two",
-        director: "Denis Villeneuve",
-        img: "https://i.guim.co.uk/img/media/feb8ccbf0d9bfa8dfe6a2c5329d9351151ab043d/0_0_2764_4096/master/2764.jpg?width=445&dpr=1&s=none",
-        social : "@dune_two",
-        runtime: 166,   
-    };
+    const { movie } = useLoaderData() as { movie: MovieType }
+
     return (
         <div id="movie">
             <div>
-                <img height={300} src={movie.img} key={movie.img} />
+                <img height={300} src={movie.img} key={movie.img} alt={movie.title} />
             </div>
             <div>
                 <h1>{movie.title ? movie.title : "no title"}</h1>
                 <i>{movie.runtime && `Runtime: ${movie.runtime} Min.`}</i>
                 {movie.social && (
                     <p>
-                        <a target="_blank" href={`www.twitter.com/${movie.social}`}>
+                        <a target="_blank" href={`https://www.twitter.com/${movie.social}`}>
                          {movie.social}   
                         </a>
                     </p>
                 )}
-                <div>
-                    <Form action="edit">
+               
+                    <Form action='edit'>
                         <button type="submit">Edit</button>
                     </Form>
-                    <Form 
-                    method="post"
-                    action="destroy"
-                    onSubmit={(e) =>{
-                        e.preventDefault();
-                    }}
-                    >
+                    <Form action='destroy'>
                         <button type="submit">Delete</button>
                     </Form>
-                </div>
+               
             </div>
         </div>
     );

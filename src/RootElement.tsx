@@ -1,6 +1,20 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLoaderData, Form } from "react-router-dom";
+import { getMovies, createMovie } from "./handleMovies";
+import { Movie } from "./handleMovies";
+
+
+export async function loader(){
+    const movies = await getMovies();
+    return { movies};
+}
+
+export async function action(){
+    const movie = await createMovie();
+    return movie;
+}
 
 export default function RootElement() {
+    const {movies} = useLoaderData() as {movies:Movie[]};
     return(
     <>
         <div id="sidebar">
@@ -15,15 +29,19 @@ export default function RootElement() {
                     <div id="search-spinner" aria-hidden={true}/>
                     <div className="sr-only" aria-live="polite"></div>
                 </form>
-                <form method="post">
+                <Form method="post">
                     <button type="submit">Add</button>
-                </form>
+                </Form>
             </div>
             <nav>
                 <ul>
-                    <li>
-                        <Link to={`/movies/1`}>Movie</Link>
+                   {movies.map((movie) =>(
+                    <li key={movie.id}>
+                        <Link to={`/movies/${movie.id}`}>
+                            {movie.title ? movie.title :"no title"}
+                        </Link>
                     </li>
+                   ))}
                 </ul>
             </nav>
         </div>
