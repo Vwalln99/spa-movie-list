@@ -26,7 +26,7 @@ function fakeDelay(key?: string) {
 
 export async function getMovies() {
   await fakeDelay(`getMovies`);
-  let movies: Movie[] = await fetch("http://localhost:5001/movies").then(
+  const movies: Movie[] = await fetch("http://localhost:5002/movies").then(
     (res) => res.json()
   );
   return movies.sort(sortBy("title", "createdAt")) ?? [];
@@ -34,7 +34,7 @@ export async function getMovies() {
 
 export async function getMovie(id: string) {
   await fakeDelay(`getMovie:${id}`);
-  let movie: Movie = await fetch(`http://localhost:5001/movies/${id}`).then(
+  const movie: Movie = await fetch(`http://localhost:5002/movies/${id}`).then(
     (res) => res.json()
   );
   return movie;
@@ -42,7 +42,7 @@ export async function getMovie(id: string) {
 
 export async function createMovie() {
   await fakeDelay();
-  let movie = {
+  const movie = {
     id: Math.random().toString(36).substring(2, 90),
     createdAt: Date.now(),
     title: "New Movie",
@@ -51,7 +51,7 @@ export async function createMovie() {
     img: "",
     social: "",
   };
-  await fetch("http://localhost:5001/movies", {
+  await fetch("http://localhost:5002/movies", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -62,16 +62,17 @@ export async function createMovie() {
 }
 
 export async function deleteMovie(id: string) {
+  console.log("deleteMovie", id);
   await fakeDelay();
   console.log(id);
-  await fetch(`http://localhost:5001/movies/${id}`, {
+  await fetch(`http://localhost:5002/movies/${id}`, {
     method: "DELETE",
   });
 }
 
 export async function updateMovie(id: string, movie: Movie) {
   await fakeDelay();
-  await fetch(`http://localhost:5001/movies/${id}`, {
+  await fetch(`http://localhost:5002/movies/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
