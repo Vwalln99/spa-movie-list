@@ -7,6 +7,9 @@ import RootElement, {
 import Movie, { loader as movieLoader } from "./Movie";
 import EditMovie, { action as editAction } from "./EditMovie";
 import { action as deleteAction } from "./Destroy";
+import Index from "./Index";
+
+
 export default function Router() {
   const router = createBrowserRouter([
     {
@@ -16,6 +19,7 @@ export default function Router() {
       loader: rootloader,
       action: rootAction,
       children: [
+        {index: true, element: <Index/>},
         {
           path: "/movies/:id",
           element: <Movie />,
