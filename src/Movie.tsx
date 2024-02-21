@@ -17,6 +17,32 @@ type MovieType = {
 export default function Movie() {
   const { movie } = useLoaderData() as { movie: MovieType };
 
+    return (
+        <div id="movie">
+            <div>
+                <img height={300} src={movie.img} key={movie.img} alt={movie.title} />
+            </div>
+            <div>
+                <h1>{movie.title ? movie.title : "no title"}</h1>
+                <i>{movie.runtime && `Runtime: ${movie.runtime} Min.`}</i>
+                {movie.social && (
+                    <p>
+                        <a target="_blank" href={`https://www.twitter.com/${movie.social}`}>
+                         {movie.social}   
+                        </a>
+                    </p>
+                )}
+                <div>
+                    <Form action='edit'>
+                        <button type="submit">Edit</button>
+                    </Form>
+                    <Form action='delete' method="POST">
+                        <button type="submit">Delete</button>
+                    </Form>
+                </div>
+            </div>
+        </div>
+    );
   return (
     <div id="movie">
       <div>
